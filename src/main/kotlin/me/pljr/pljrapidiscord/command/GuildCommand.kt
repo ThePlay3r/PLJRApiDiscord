@@ -9,7 +9,7 @@ abstract class GuildCommand(override val name: String, override val description:
 
     override fun onSlashCommand(event: SlashCommandEvent) {
         event.deferReply()
-        val context = DefaultCommandContext(event, getData())
+        val context = DefaultCommandContext(event, this.data)
         val member = event.member ?: return
         if (checkPerm(member)) {
             if (event.name == name) {
@@ -21,7 +21,7 @@ abstract class GuildCommand(override val name: String, override val description:
     }
 
     open fun noPerm(context: CommandContext) {
-
+        context.channel.sendMessage("You don't have sufficient role.")
     }
 
     private fun checkPerm(member: Member) : Boolean {
@@ -34,6 +34,6 @@ abstract class GuildCommand(override val name: String, override val description:
     }
 
     fun register(guild: Guild) {
-        guild.upsertCommand(getData())
+        guild.upsertCommand(this.data)
     }
 }

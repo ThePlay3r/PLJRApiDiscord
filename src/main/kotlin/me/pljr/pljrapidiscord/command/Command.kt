@@ -8,7 +8,8 @@ interface Command {
 
     val description: String
 
-    fun getData() = CommandData(name, description)
+    val data: CommandData
+        get() = CommandData(name, description)
 
     fun onCommand(context: CommandContext)
 }

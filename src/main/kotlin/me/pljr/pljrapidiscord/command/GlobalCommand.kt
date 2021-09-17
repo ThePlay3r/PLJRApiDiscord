@@ -9,11 +9,11 @@ abstract class GlobalCommand(override val name: String, override val description
     override fun onSlashCommand(event: SlashCommandEvent) {
         event.deferReply()
         if (event.name == name) {
-            this.onCommand(DefaultCommandContext(event, getData()))
+            this.onCommand(DefaultCommandContext(event, this.data))
         }
     }
 
     fun register(jda: JDA) {
-        jda.upsertCommand(getData())
+        jda.upsertCommand(this.data)
     }
 }
