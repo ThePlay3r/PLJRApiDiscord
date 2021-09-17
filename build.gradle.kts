@@ -6,13 +6,24 @@ plugins {
     id("maven-publish")
 }
 
-group = "me.pljr.pljrapispigot"
+group = "me.pljr"
 version = "1.0"
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "me.pljr"
+            artifactId = "pljrapidiscord"
+            version = "1.0"
+
+            from(components["java"])
+        }
+    }
+}
 
 repositories {
     mavenCentral()
     maven("https://m2.dv8tion.net/releases")
-
 }
 
 dependencies {
