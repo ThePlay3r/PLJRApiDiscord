@@ -6,7 +6,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "me.pljr"
+group = "me.pljr.pljrapispigot"
 version = "1.0"
 
 repositories {
