@@ -14,6 +14,6 @@ abstract class GlobalCommand(override val name: String, override val description
     }
 
     fun register(jda: JDA) {
-        jda.upsertCommand(this.data)
+        jda.upsertCommand(this.data).queue()
     }
 }

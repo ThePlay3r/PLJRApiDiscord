@@ -34,6 +34,6 @@ abstract class GuildCommand(override val name: String, override val description:
     }
 
     fun register(guild: Guild) {
-        guild.upsertCommand(this.data)
+        guild.upsertCommand(this.data).queue()
     }
 }
