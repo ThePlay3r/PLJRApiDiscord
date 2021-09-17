@@ -8,11 +8,11 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 abstract class GuildCommand(override val name: String, override val description: String, private val role: Int = -1) : Command, ListenerAdapter() {
 
     override fun onSlashCommand(event: SlashCommandEvent) {
+        event.deferReply()
         val context = DefaultCommandContext(event, getData())
         val member = event.member ?: return
         if (checkPerm(member)) {
             if (event.name == name) {
-                event.deferReply()
                 this.onCommand(context)
             }
         } else {
