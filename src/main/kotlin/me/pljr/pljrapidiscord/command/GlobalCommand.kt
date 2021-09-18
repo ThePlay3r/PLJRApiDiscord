@@ -7,13 +7,14 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 abstract class GlobalCommand(override val name: String, override val description: String) : Command, ListenerAdapter() {
 
     override fun onSlashCommand(event: SlashCommandEvent) {
-        event.deferReply()
         if (event.name == name) {
+            event.deferReply().queue()
             this.onCommand(DefaultCommandContext(event, this.data))
         }
     }
 
     fun register(jda: JDA) {
+        jda.addEventListener(this)
         jda.upsertCommand(this.data).queue()
     }
 }

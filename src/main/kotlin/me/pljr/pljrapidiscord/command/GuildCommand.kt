@@ -8,23 +8,25 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 abstract class GuildCommand(override val name: String, override val description: String, private val role: Int = -1) : Command, ListenerAdapter() {
 
     override fun onSlashCommand(event: SlashCommandEvent) {
-        event.deferReply()
-        val context = DefaultCommandContext(event, this.data)
-        val member = event.member ?: return
-        if (checkPerm(member)) {
-            if (event.name == name) {
+        if (event.name == name) {
+            event.deferReply().queue()
+            val context = DefaultCommandContext(event, this.data)
+            val member = event.member ?: return
+            if (checkPerm(member)) {
                 this.onCommand(context)
+            } else {
+                noPerm(context)
             }
-        } else {
-            noPerm(context)
         }
+
     }
 
     open fun noPerm(context: CommandContext) {
-        context.channel.sendMessage("You don't have sufficient role.")
+        context.channel.sendMessage("You don't have sufficient role.").queue()
     }
 
     private fun checkPerm(member: Member) : Boolean {
+        if (this.role < 0) return true
         member.roles.forEach { role ->
             if (role.position >= this.role) {
                 return true
@@ -34,6 +36,7 @@ abstract class GuildCommand(override val name: String, override val description:
     }
 
     fun register(guild: Guild) {
+        guild.jda.addEventListener(this)
         guild.upsertCommand(this.data).queue()
     }
 }

@@ -32,7 +32,7 @@ interface CommandContext {
         get() = event.jda
 
     val hook: InteractionHook
-        get() = event.hook
+        get() = event.hook.setEphemeral(true)
 
     fun getOption(name: String) = event.getOption(name)
 
