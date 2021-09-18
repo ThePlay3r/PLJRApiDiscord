@@ -6,19 +6,22 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 abstract class GuildCommand(override val name: String, override val description: String, private val role: Int = -1) : Command, ListenerAdapter() {
+    private lateinit var guild: Guild
 
     override fun onSlashCommand(event: SlashCommandEvent) {
-        if (event.name == name) {
-            event.deferReply().queue()
-            val context = DefaultCommandContext(event, this.data)
-            val member = event.member ?: return
-            if (checkPerm(member)) {
-                this.onCommand(context)
-            } else {
-                noPerm(context)
+        val eventGuild = event.guild ?: return
+        if (eventGuild == guild) {
+            if (event.name == name) {
+                event.deferReply().queue()
+                val context = DefaultCommandContext(event, this.data)
+                val member = event.member ?: return
+                if (checkPerm(member)) {
+                    this.onCommand(context)
+                } else {
+                    noPerm(context)
+                }
             }
         }
-
     }
 
     open fun noPerm(context: CommandContext) {
@@ -36,6 +39,7 @@ abstract class GuildCommand(override val name: String, override val description:
     }
 
     fun register(guild: Guild) {
+        this.guild = guild
         guild.jda.addEventListener(this)
         guild.upsertCommand(this.data).queue()
     }
