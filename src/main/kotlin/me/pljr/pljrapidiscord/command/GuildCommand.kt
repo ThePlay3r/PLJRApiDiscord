@@ -5,7 +5,8 @@ import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
-abstract class GuildCommand(override val name: String, override val description: String, private val role: Int = -1) : Command, ListenerAdapter() {
+
+abstract class GuildCommand(override val name: String, override val description: String, private val roleId: Long) : Command, ListenerAdapter() {
     private lateinit var guild: Guild
 
     override fun onSlashCommand(event: SlashCommandEvent) {
@@ -29,9 +30,9 @@ abstract class GuildCommand(override val name: String, override val description:
     }
 
     private fun checkPerm(member: Member) : Boolean {
-        if (this.role < 0) return true
+        val requiredRole = guild.getRoleById(roleId) ?: return true
         member.roles.forEach { role ->
-            if (role.position >= this.role) {
+            if (role.position >= requiredRole.position) {
                 return true
             }
         }
