@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
-abstract class GlobalCommand(override val name: String, override val description: String) : Command, ListenerAdapter() {
+abstract class GlobalCommand(final override val name: String, final override val description: String) : Command, ListenerAdapter() {
 
     override fun onSlashCommand(event: SlashCommandEvent) {
         if (event.name == name) {

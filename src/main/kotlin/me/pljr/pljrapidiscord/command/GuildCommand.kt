@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 
-abstract class GuildCommand(override val name: String, override val description: String, private val roleId: Long) : Command, ListenerAdapter() {
+abstract class GuildCommand(final override val name: String, final override val description: String, private val roleId: Long = -1) : Command, ListenerAdapter() {
     private lateinit var guild: Guild
 
     override fun onSlashCommand(event: SlashCommandEvent) {
